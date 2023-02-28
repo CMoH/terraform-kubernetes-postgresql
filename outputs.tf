@@ -1,3 +1,8 @@
+output "service" {
+  description = "PostgreSQL kubernetes service"
+  value       = kubernetes_service.postgresql
+}
+
 output "hostname" {
   description = "Name of the kubernetes service"
   value       = kubernetes_service.postgresql.metadata[0].name
