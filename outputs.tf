@@ -13,16 +13,6 @@ output "port" {
   value       = kubernetes_service.postgresql.spec[0].port[0].port
 }
 
-output "password_secret" {
-  description = "Secret that is created with the database password"
-  value       = local.create_password ? kubernetes_secret.postgresql[0].metadata[0].name : var.password_secret
-}
-
-output "password_key" {
-  description = "Key for the database password in the secret"
-  value       = var.password_key
-}
-
 output "name" {
   description = "Database name"
   value       = var.name
@@ -38,3 +28,19 @@ output "username" {
     kubernetes_stateful_set.postgresql
   ]
 }
+
+output "password_secret" {
+  description = "Secret that is created with the database password"
+  value       = local.create_password ? kubernetes_secret.postgresql[0].metadata[0].name : var.password_secret
+}
+
+output "password_key" {
+  description = "Key for the database password in the secret"
+  value       = var.password_key
+}
+
+output "password" {
+  description = "Database password"
+  value       = local.create_password ? random_password.password.result : null
+}
+
