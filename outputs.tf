@@ -42,5 +42,6 @@ output "password_key" {
 output "password" {
   description = "Database password"
   value       = local.create_password ? random_password.password.result : null
+  sensitive = true
 }
 
