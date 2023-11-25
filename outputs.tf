@@ -22,7 +22,7 @@ output "name" {
 }
 
 output "username" {
-  description = "Username that can login to the databse"
+  description = "Username that can login to the database"
   value       = var.username
   depends_on = [
     kubernetes_stateful_set.postgresql
@@ -44,4 +44,3 @@ output "password" {
   value       = local.create_password ? random_password.password.result : null
   sensitive = true
 }
-
