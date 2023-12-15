@@ -340,3 +340,9 @@ variable "startup_probe_failure" {
   description = "Minimum consecutive failures for the probe to be considered failed after having succeeded"
   default     = 3
 }
+
+variable "initdb_d" {
+  type = map(any)
+  description = "Database initialization files, executed at first run from /docker-entrypoint-initdb.d"
+  default = { }
+}

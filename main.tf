@@ -16,6 +16,17 @@ locals {
   }], var.env_secret])
 }
 
+
+resource "kubernetes_config_map" "postgresql_initdb_d" {
+    metadata {
+    namespace   = var.namespace
+    name        = "${var.object_prefix}-initdb.d"
+    labels      = local.common_labels
+    annotations = var.annotations
+  }
+  data = var.initdb_d
+}
+
 resource "kubernetes_stateful_set" "postgresql" {
   timeouts {
     create = var.timeout_create
@@ -123,6 +134,10 @@ resource "kubernetes_stateful_set" "postgresql" {
             name       = "data"
             mount_path = "/bitnami/postgresql"
           }
+          volume_mount {
+            name       = "initdb-d"
+            mount_path = "/docker-entrypoint-initdb.d"
+          }
           dynamic "readiness_probe" {
             for_each = var.readiness_probe_enabled ? [1] : []
             content {
@@ -199,6 +214,12 @@ resource "kubernetes_stateful_set" "postgresql" {
           empty_dir {
             medium     = "Memory"
             size_limit = "5Mi"
+          }
+        }
+        volume {
+          name = "initdb-d"
+          config_map {
+            name = "${var.object_prefix}-initdb.d"
           }
         }
       }
